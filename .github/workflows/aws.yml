@@ -27,5 +27,7 @@ jobs:
     - name: deploy-to-k8s
       if: github.ref == 'refs/heads/deploy-to-k8s'
       run: |
+        sed -i "s#IMAGE_NAME#mywebserver#g" kustomization.yaml
+        sed -i "s/evanndeb/sha-$(git rev-parse --short HEAD)/g" kustomization.yaml
         aws eks update-kubeconfig --name isen
         kubectl kustomize . | kubectl apply -f -
